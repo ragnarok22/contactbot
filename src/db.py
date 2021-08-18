@@ -1,6 +1,17 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from src.db import Base
+from settings import CLEARDB_DATABASE_URL
+
+engine = create_engine(CLEARDB_DATABASE_URL)
+Session = sessionmaker(bind=engine)
+session = Session()
+Base = declarative_base()
+
+
+# models
 
 
 class Client(Base):
@@ -21,3 +32,8 @@ class Client(Base):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+
+# engine
+def start_db():
+    Base.metadata.create_all(engine)
